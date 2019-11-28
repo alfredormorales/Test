@@ -126,6 +126,13 @@ namespace Test.Controllers
 
             return Json(new { success = Valid, message = Message, user = objUser });
         }
+
+        [HttpGet("[action]")]
+        public JsonResult logoutSession()
+        {
+            HttpContext.Session.Remove("LoggedUser");
+            return Json(new { success = true });
+        }
     }
     
 }

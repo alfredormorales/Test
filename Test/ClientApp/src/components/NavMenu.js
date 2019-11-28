@@ -21,6 +21,10 @@ export class NavMenu extends Component {
     });
   }
 
+handleLogout = () => {
+    this.props.handleLogout()
+}
+
   render () {
     return (
       <header>
@@ -34,8 +38,11 @@ export class NavMenu extends Component {
                   <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/fetch-data">Recibos</NavLink>
+                  <NavLink tag={Link} className="text-dark" to="/receipt">Recibos</NavLink>
                 </NavItem>
+                <NavItem>
+                    <NavLink tag={Link} className="text-dark" to="/" onClick={this.handleLogout}>Logout</NavLink>
+                </NavItem>                   
               </ul>
             </Collapse>
           </Container>

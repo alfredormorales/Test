@@ -21,6 +21,7 @@ export default class App extends Component {
         }
 
         this.handleLogin = this.handleLogin.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     handleLogin = (data) => {
@@ -36,7 +37,7 @@ export default class App extends Component {
         fetch('api/User/checkSession')
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                if (data.success && !this.state.logged_In) {
                     this.setState({
                         logged_status: "LOG_IN",
                         logged_In: true,
@@ -44,7 +45,21 @@ export default class App extends Component {
                     });
                 }
             });
-        //Revisar como recuperar el objeto de datos cuando se logea con .NET
+    }
+
+    handleLogout = () => {
+        fetch('api/User/logoutSession')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.setState({
+                        logged_status: "NOT_LOG_IN",
+                        logged_In: false,
+                        error_message: "",
+                        user: {}
+                    });
+                }
+            });
     }
 
     componentDidMount = () => {
@@ -53,8 +68,8 @@ export default class App extends Component {
 
     render () {
         return (
-            !this.state.logged_In ? <Login handleLogin={this.handleLogin}  /> :
-            <Layout>
+            !this.state.logged_In ? <Login handleLogin={this.handleLogin} /> :
+                <Layout handleLogout={this.handleLogout}>
                 <Route
                         exact path='/'
                         render={props => (<Home {...props} logged_status={this.state.logged_status} />
@@ -64,8 +79,8 @@ export default class App extends Component {
                         path='/recipment'
                         render={props => (<Receipt {...props} logged_status={this.state.logged_status} />
                         )}
-                />
-            </Layout>
+                    />
+             </Layout>
         );
     }
 }
