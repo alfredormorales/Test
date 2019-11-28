@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-export class FetchData extends Component {
-  static displayName = FetchData.name;
+export class Receipt extends Component {
+    static displayName = Receipt.name;
 
   constructor (props) {
     super(props);
-    this.state = { forecasts: [], loading: true };
+      this.state = { receipts: [], loading: true };
 
     fetch('api/SampleData/WeatherForecasts')
       .then(response => response.json())
@@ -14,7 +14,7 @@ export class FetchData extends Component {
       });
   }
 
-  static renderForecastsTable (forecasts) {
+  static renderRecipmentTable (forecasts) {
     return (
       <table className='table table-striped'>
         <thead>
@@ -42,12 +42,11 @@ export class FetchData extends Component {
   render () {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
-      : FetchData.renderForecastsTable(this.state.forecasts);
+        : Receipt.renderRecipmentTable(this.state.receipts);
 
     return (
       <div>
-        <h1>Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
+        <h1>Receipts</h1>
         {contents}
       </div>
     );

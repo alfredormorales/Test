@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Test.EFModels;
 using Test.Infrastructure;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace Test.Controllers
 {
@@ -81,8 +82,9 @@ namespace Test.Controllers
         {
             return Json("{}");
         }
-        [HttpPost]
-        public async Task<JsonResult> validateUser(User user)
+
+        [HttpPost("[action]")]
+        public JsonResult validateUser([FromBody] User user)
         {
             string Message = "";
             bool Valid = false;
@@ -91,13 +93,16 @@ namespace Test.Controllers
                 var objUser = new User();
                 testDBContext db = new testDBContext();
 
-                objUser = db.User.Where(u => u.UserName == user.UserName && u.Password == user.Password).FirstOrDefault(null);
+                objUser = db.User.Where(u => u.UserName == user.UserName && u.Password == user.Password).FirstOrDefault();
 
                 Valid = objUser == null ? false : true;
 
                 Message = Valid ? "" : "Usuario o contraseña incorrecta";
 
-                //HttpContext.Session.SetString("LogedUser", Valid );
+                if (Valid)
+                {
+                    HttpContext.Session.SetString("LoggedUser", JsonConvert.SerializeObject(new { success = Valid, message = Message, user = objUser }));
+                }
 
                 return Json(new { success = Valid, message = Message, user = objUser });
             }
@@ -106,6 +111,20 @@ namespace Test.Controllers
                 logger.Error(ex.Message);
                 return Json(new { success = false, message = "Error del servicio"});
             }
+        }
+
+        [HttpGet("[action]")]
+        public JsonResult checkSession()
+        {
+            string Message = "";
+            bool Valid = false;
+            var value = HttpContext.Session.GetString("LoggedUser");
+
+            Message = value == null ? "No a accedido a sistema" : "";
+            Valid = value != null ? true : false;
+            User objUser = value != null ? JsonConvert.DeserializeObject<User>(value) : new User(); 
+
+            return Json(new { success = Valid, message = Message, user = objUser });
         }
     }
     

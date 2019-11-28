@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
+import { Receipt } from './components/Receipt';
 import Login from "./components/Login";
 
 export default class App extends Component {
@@ -27,12 +27,23 @@ export default class App extends Component {
         this.setState ({
             logged_status: "LOG_IN",
             logged_In: true,
-            user : data
+            user : data.user
         });
     }
 
     checkLoginStatus = () => {
-        console.log("aun no implementado checkLoginStatus");
+
+        fetch('api/User/checkSession')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.setState({
+                        logged_status: "LOG_IN",
+                        logged_In: true,
+                        user: data.user
+                    });
+                }
+            });
         //Revisar como recuperar el objeto de datos cuando se logea con .NET
     }
 
@@ -50,8 +61,8 @@ export default class App extends Component {
                     )}
                 />
                     <Route
-                        path='/fetch-data'
-                        render={props => (<FetchData {...props} logged_status={this.state.logged_status} />
+                        path='/recipment'
+                        render={props => (<Receipt {...props} logged_status={this.state.logged_status} />
                         )}
                 />
             </Layout>

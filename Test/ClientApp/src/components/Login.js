@@ -9,7 +9,8 @@ class Login extends Component {
 
         this.state = {
             username: "",
-            passowrd: ""
+            password: "",
+            message_error: ""
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,7 +30,7 @@ class Login extends Component {
 
             fetch("api/User/validateUser", {
                 method: 'POST', // or 'PUT'
-                body: JSON.stringify({ user_name: this.state.username, password: this.state.passowrd }), // data can be `string` or {object}!
+                body: JSON.stringify({ UserName : this.state.username, Password: this.state.password }), // data can be `string` or {object}!
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -37,12 +38,15 @@ class Login extends Component {
                 .catch(error => console.error('Error:', error))
                 .then(response => {
                     console.log('Success:', response);
-
-                    this.props.handleLogin({
-                        logged_status: "LOG_IN",
-                        logged_In: true,
-                        user: { user_name: "Fredy" }
-                    });
+                    if (response.success) {
+                        this.props.handleLogin({
+                            logged_status: "LOG_IN",
+                            logged_In: true,
+                            user: response.user
+                        });
+                    } else {
+                        this.setState({ message_error: response.message});
+                    }
                 }
             );
 
@@ -56,28 +60,31 @@ class Login extends Component {
         return (
             <div className="Login">
                 <form onSubmit={this.handleSubmit}>
-                    <FormGroup controlId="email" bsSize="large">
+                    <FormGroup >
                         <Label>Email</Label>
                         <Input
                             autoFocus
+                            name="username"
                             type="email"
                             value={this.state.value}
                             onChange={this.handleChange}
                             required
                         />
                     </FormGroup>
-                    <FormGroup controlId="password" bsSize="large">
+                    <FormGroup>
                         <Label>Password</Label>
                         <Input
                             value={this.state.password}
                             onChange={this.handleChange}
+                            name="password"
                             required
                     type="password"
                 />
                     </FormGroup>
-                    <Button block bsSize="large" /*disabled={!this.validateForm()}*/ type="submit">
+                    <Button block /*disabled={!this.validateForm()}*/ type="submit">
                         Login
                     </Button>
+                    <label style={{color : "red"}}>{this.state.message_error}</label>
                 </form>
             </div>
         );
