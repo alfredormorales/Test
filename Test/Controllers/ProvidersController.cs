@@ -21,7 +21,7 @@ namespace Test.Controllers
 
         public ProvidersController(ILog logger) => this.logger = logger;
 
-        public async Task<JsonResult> saveProvider(Provider provider)
+        public JsonResult saveProvider([FromBody] Provider provider)
         {
             string Message = "";
             bool Error = false;
@@ -73,7 +73,8 @@ namespace Test.Controllers
 
         }
 
-        public async Task<JsonResult> getProvider(string busqueda)
+        [HttpGet("[action]")]
+        public JsonResult getProvider([FromQuery] string search)
         {
             string Message = "";
             bool Error = false;

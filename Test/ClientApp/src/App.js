@@ -13,7 +13,7 @@ export default class App extends Component {
 
         this.state = {
             logged_status : "NOT_LOG_IN",
-            logged_In: false,
+            logged_In: null,
             error_message: "",
             user: {
 
@@ -43,6 +43,10 @@ export default class App extends Component {
                         logged_In: true,
                         user: data.user
                     });
+                } else {
+                    this.setState({
+                        logged_In: false
+                    })
                 }
             });
     }
@@ -58,7 +62,7 @@ export default class App extends Component {
                         error_message: "",
                         user: {}
                     });
-                }
+                } 
             });
     }
 
@@ -68,18 +72,19 @@ export default class App extends Component {
 
     render () {
         return (
+            this.state.logged_In == null ? <p>Cargando...</p> :
             !this.state.logged_In ? <Login handleLogin={this.handleLogin} /> :
-                <Layout handleLogout={this.handleLogout}>
+            <Layout handleLogout={this.handleLogout}>
                 <Route
                         exact path='/'
                         render={props => (<Home {...props} logged_status={this.state.logged_status} />
                     )}
                 />
-                    <Route
-                        path='/recipment'
-                        render={props => (<Receipt {...props} logged_status={this.state.logged_status} />
-                        )}
-                    />
+                <Route
+                    path='/receipt'
+                    render={props => (<Receipt {...props} logged_status={this.state.logged_status} />
+                    )}
+                />
              </Layout>
         );
     }

@@ -57,12 +57,12 @@ namespace PruebasUnitarias
                 Name = "Muebles Morales"
             };
 
-            var res = await test.saveProvider(provedor);
+            var res = test.saveProvider(provedor);
             Assert.IsType<Provider>(provedor);
         }
 
         [Fact]
-        public async void updateProvider()
+        public void updateProvider()
         {
             ProvidersController test = new ProvidersController(logger);
 
@@ -73,7 +73,7 @@ namespace PruebasUnitarias
                 Name = "Muebles Morales Perez"
             };
 
-            var res = await test.saveProvider(provedor);
+            var res = test.saveProvider(provedor);
             Assert.IsType<Provider>(provedor);
         }
         #endregion

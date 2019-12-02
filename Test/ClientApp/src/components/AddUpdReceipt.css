@@ -1,0 +1,10 @@
+﻿@media all and (min-width: 480px) {
+    .AddUpdReceipt {
+        padding: 60px 0;
+    }
+
+        .AddUpdReceipt form {
+            margin: 0 auto;
+            max-width: 320px;
+        }
+}

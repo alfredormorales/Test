@@ -72,7 +72,8 @@ namespace Test.Controllers
 
         }
 
-        public async Task<JsonResult> getCurrency(string busqueda)
+        [HttpPost("[action]")]
+        public JsonResult getCurrency([FromBody] string search)
         {
             string Message = "";
             bool Error = false;

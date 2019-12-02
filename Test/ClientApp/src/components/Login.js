@@ -81,7 +81,7 @@ class Login extends Component {
                     type="password"
                 />
                     </FormGroup>
-                    <Button block /*disabled={!this.validateForm()}*/ type="submit">
+                    <Button block type="submit">
                         Login
                     </Button>
                     <label style={{color : "red"}}>{this.state.message_error}</label>
