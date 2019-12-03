@@ -72,8 +72,8 @@ namespace Test.Controllers
 
         }
 
-        [HttpPost("[action]")]
-        public JsonResult getCurrency([FromBody] string search)
+        [HttpGet("[action]")]
+        public JsonResult getCurrency([FromQuery] string search)
         {
             string Message = "";
             bool Error = false;

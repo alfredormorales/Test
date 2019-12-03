@@ -52,7 +52,7 @@ class Login extends Component {
 
             //metodo para consultar usuario
         } catch (ex) {
-            alert(ex.message);
+            console.log(ex.message);
         }
     };
 

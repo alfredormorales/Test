@@ -14,18 +14,31 @@ export class Receipt extends Component {
             tooltipOpen: false
         };
 
-        fetch('api/Receipts/getReceipts?search=' + this.state.search  
-        )
-      .then(response => response.json())
-            .then(data => {
-                this.setState({ receipts: data, loading: false });
-            });
+        this.getReceipts = this.getReceipts.bind(this);
+        this.toggleLoading = this.toggleLoading.bind(this);
+
+        this.getReceipts();
+
     }
+
+    getReceipts = () => {
+        fetch('api/Receipts/getReceipts?search=' + this.state.search
+        )
+        .then(response => response.json())
+        .then(data => {
+            this.setState({ receipts: data, loading: false });
+        });
+    }
+
+    
+
+
+    toggleLoading = () => { this.setState({ loading: true })};
 
     toggle = () => { this.setState({ tooltipOpen: !this.state.tooltipOpen }) };
 
-
-    static renderReceiptTable(receipts, tooltipOpen, childRef) {
+    static renderReceiptTable(receipts, tooltipOpen) {
+        console.log(receipts);
         return ( 
       <table className='table table-striped'>
         <thead>
@@ -46,7 +59,7 @@ export class Receipt extends Component {
                 <td>{receipt.id}</td>
                 <td>{receipt.provider.name}</td>
                 <td>{receipt.currency.name}</td>
-                <td>{receipt.ammount}</td>
+                <td>{receipt.amount}</td>
                 <td>{receipt.date}</td>
                 <td>{receipt.comment}</td>
                             <td>{receipt.status ? "Activo" : "Inactivo"}</td>
@@ -61,7 +74,6 @@ export class Receipt extends Component {
   }
 
     render() {
-
     let contents = this.state.loading
         ? <p><em>Loading...</em></p>
         : Receipt.renderReceiptTable(this.state.receipts, this.state.tooltipOpen);
@@ -69,7 +81,7 @@ export class Receipt extends Component {
     return (
         <div>
             <h1>Recibos</h1>
-            <AddUpdReceipt tooltipOpen={this.tooltipOpen} /> 
+            <AddUpdReceipt tooltipOpen={this.tooltipOpen} getReceipts={this.getReceipts} toggleLoading={this.toggleLoading}/> 
            {contents}
       </div>
     );
